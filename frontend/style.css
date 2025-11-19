@@ -1,0 +1,84 @@
+/* Basic shared styles */
+:root{
+  --bg: #f4f6f8;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --primary: #0b84ff;
+  --accent: #06b6d4;
+  --radius: 10px;
+  --shadow: 0 6px 18px rgba(12,18,26,0.06);
+}
+
+*{box-sizing: border-box}
+body{
+  margin:0;
+  font-family: Inter, system-ui, Arial, sans-serif;
+  background: var(--bg);
+  color: #0f172a;
+}
+
+/* Top bar and sidebar */
+.topbar{
+  height:60px;
+  background: white;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 0 20px;
+  box-shadow: var(--shadow);
+}
+.logo{margin:0}
+
+.sidebar{
+  position: fixed;
+  top: 60px;
+  left:0;
+  bottom:0;
+  width:200px;
+  background: #ffffff;
+  padding-top: 20px;
+  box-shadow: var(--shadow);
+}
+.sidebar ul{list-style:none;padding:0;margin:0}
+.sidebar li{padding:12px 18px}
+.sidebar li.active{background: rgba(11,132,255,0.08);font-weight:600}
+.sidebar a{color:inherit;text-decoration:none}
+
+/* Main content area */
+.main-content{
+  margin-left:220px;
+  padding: 28px;
+}
+
+.page-center{display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}
+.card{background:var(--card);padding:18px;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px}
+.login-card{width:360px}
+
+.brand h1{margin:0 0 6px 0}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+
+.form{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.label{font-size:13px;margin-bottom:4px}
+.input{padding:10px;border-radius:8px;border:1px solid #e6e9ee}
+
+.btn{padding:12px;border-radius:8px;border:none;cursor:pointer}
+.btn.primary{background:var(--primary);color:white}
+
+/* Dashboard grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:18px 0}
+.card.small{padding:14px;text-align:center}
+.metric{font-size:20px;font-weight:700;margin-top:8px}
+
+/* Table */
+.patients-table{width:100%;border-collapse:collapse}
+.patients-table th, .patients-table td{padding:12px;border-bottom:1px solid #eef2f6;text-align:left}
+
+.alerts-list{list-style:none;padding:0;margin:0}
+.alerts-list li{padding:10px;border-radius:8px;background:#fff;margin-bottom:8px;box-shadow:var(--shadow)}
+
+/* Responsive small screens */
+@media (max-width:720px){
+  .sidebar{display:none}
+  .main-content{margin-left:0;padding:16px}
+}
