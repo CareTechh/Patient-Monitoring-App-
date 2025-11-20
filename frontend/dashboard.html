@@ -1,3 +1,11 @@
+<script>
+  const API_URL = "http://localhost:8000";
+</script>
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,5 +63,16 @@
     </section>
 
   </main>
+
+  <script>
+async function loadDashboard() {
+  const res = await fetch(API_URL + "/api/dashboard");
+  const data = await res.json().catch(() => []);
+  console.log(data);
+}
+
+document.addEventListener("DOMContentLoaded", loadDashboard);
+</script>
+
 </body>
 </html>
