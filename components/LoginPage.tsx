@@ -29,7 +29,22 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
       const supabase = createClient();
 
       if (isSignup) {
+        // Validation
+        if (!name.trim()) {
+          toast.error('Please enter your full name');
+          setIsLoading(false);
+          return;
+        }
+        
+        if (password.length < 6) {
+          toast.error('Password must be at least 6 characters');
+          setIsLoading(false);
+          return;
+        }
+
         // Call server to create user with role metadata
+        console.log('Attempting signup:', { email, name, role: selectedRole });
+        
         const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-3d5bb2df/signup`, {
           method: 'POST',
           headers: {
@@ -40,6 +55,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
         });
 
         const data = await response.json();
+        console.log('Signup response:', data);
 
         if (!response.ok) {
           console.error('Signup error:', data.error);
@@ -48,7 +64,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           return;
         }
 
-        toast.success('Account created! Please log in.');
+        toast.success('Account created successfully! You can now log in.');
         setIsSignup(false);
         setPassword('');
         setIsLoading(false);
@@ -56,6 +72,8 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
       }
 
       // Login with Supabase
+      console.log('Attempting login:', email);
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -63,14 +81,25 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
 
       if (error) {
         console.error('Login error:', error.message);
-        toast.error(error.message || 'Failed to login');
+        
+        // Better error messages
+        if (error.message.includes('Invalid login credentials')) {
+          toast.error('Invalid email or password. Please check your credentials.');
+        } else if (error.message.includes('Email not confirmed')) {
+          toast.error('Please verify your email before logging in.');
+        } else {
+          toast.error(error.message || 'Failed to login');
+        }
+        
         setIsLoading(false);
         return;
       }
 
       if (data.user) {
         const userName = data.user.user_metadata?.name || 'User';
-        const userRole = data.user.user_metadata?.role || selectedRole;
+        const userRole = data.user.user_metadata?.role || 'patient';
+
+        console.log('Login successful:', { id: data.user.id, email: data.user.email, name: userName, role: userRole });
 
         toast.success(`Welcome back, ${userName}!`);
         
@@ -81,9 +110,9 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           role: userRole
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Authentication error:', error);
-      toast.error('An unexpected error occurred');
+      toast.error(error.message || 'An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }
