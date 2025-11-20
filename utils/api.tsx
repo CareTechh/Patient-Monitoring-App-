@@ -1,7 +1,8 @@
 import { projectId, publicAnonKey } from './supabase/info';
 import { createClient } from './supabase/client';
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = "http://localhost:8000/make-server-3d5bb2df";
+
 
 
 // Get auth token
