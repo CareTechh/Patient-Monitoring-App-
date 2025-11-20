@@ -1,3 +1,9 @@
+<script>
+  const API_URL = "http://localhost:8000";
+</script>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +12,38 @@
   <title>Login - Patient Monitor</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
+  <script>
+async function loginUser() {
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const msg = document.getElementById("message");
+
+  const res = await fetch(API_URL + "/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password })
+  });
+
+  if (res.ok) {
+    msg.textContent = "Login successful! Redirecting...";
+    msg.style.color = "green";
+    setTimeout(() => {
+      window.location.href = "dashboard.html";
+    }, 700);
+  } else {
+    msg.textContent = "Login failed (" + res.status + ")";
+    msg.style.color = "red";
+  }
+}
+
+// attach to form
+document.querySelector("form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  loginUser();
+});
+</script>
+
 <body>
   <main class="page-center">
     <section class="card login-card">
